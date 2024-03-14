@@ -1,7 +1,7 @@
 package lexer
 
 import (
-	"lib/token"
+	"monkey/token"
 )
 
 type Lexer struct {
@@ -13,11 +13,11 @@ type Lexer struct {
 
 func New(input string) *Lexer {
 	l := &Lexer{input: input}
-	l.ReadChar() // 调用一次，初始化position: 0, readPosition: 1
+	l.readChar() // 调用一次，初始化position: 0, readPosition: 1
 	return l
 }
 
-func (l *Lexer) ReadChar() {
+func (l *Lexer) readChar() {
 	if l.readPosition >= len(l.input) {
 		l.ch = 0
 	} else {
@@ -31,11 +31,40 @@ func (l *Lexer) NextToken() token.Token {
 	var t token.Token
 	l.skipWhiteSpace() // white space
 	switch string(l.ch) {
+
 	case token.ASSIGN:
-		t = NewToken(token.ASSIGN, l.ch)
+		if l.peekChar() == '=' {
+			t = token.Token{Type: token.EQ, Literal: "=="}
+			l.readChar()
+		} else {
+			t = NewToken(token.ASSIGN, l.ch)
+		}
 
 	case token.PLUS:
 		t = NewToken(token.PLUS, l.ch)
+
+	case token.MINUS:
+		t = NewToken(token.MINUS, l.ch)
+
+	case token.ASTERISK:
+		t = NewToken(token.ASTERISK, l.ch)
+
+	case token.BANG:
+		if l.peekChar() == '=' {
+			t = token.Token{Type: token.NOT_EQ, Literal: "!="}
+			l.readChar()
+		} else {
+			t = NewToken(token.BANG, l.ch)
+		}
+
+	case token.SLASH:
+		t = NewToken(token.SLASH, l.ch)
+
+	case token.LT:
+		t = NewToken(token.LT, l.ch)
+
+	case token.GT:
+		t = NewToken(token.GT, l.ch)
 
 	case token.COMMA:
 		t = NewToken(token.COMMA, l.ch)
@@ -71,30 +100,38 @@ func (l *Lexer) NextToken() token.Token {
 		}
 	}
 
-	l.ReadChar()
+	l.readChar()
 	return t
 }
 
 func (l *Lexer) readIdentifier() string {
 	position := l.position
 	for isLetter(l.ch) {
-		l.ReadChar()
+		l.readChar()
 	}
 
 	return l.input[position:l.position]
 }
 
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.readPosition]
+	}
+}
+
 func (l *Lexer) readInt() string {
 	position := l.position
 	for isNumber(l.ch) {
-		l.ReadChar()
+		l.readChar()
 	}
 	return l.input[position:l.position]
 }
 
 func (l *Lexer) skipWhiteSpace() {
 	for isWhiteSpace(l.ch) {
-		l.ReadChar()
+		l.readChar()
 	}
 }
 

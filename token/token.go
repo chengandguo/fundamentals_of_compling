@@ -16,9 +16,17 @@ const (
 	IDENT = "IDENT" // 标识符
 	INT   = "INT"
 
-	ASSIGN = "="
-	EQUAL  = "=="
-	PLUS   = "+"
+	ASSIGN   = "="
+	EQ       = "=="
+	NOT_EQ   = "!="
+	PLUS     = "+"
+	MINUS    = "-"
+	BANG     = "!"
+	ASTERISK = "*"
+	SLASH    = "/"
+
+	LT = "<"
+	GT = ">"
 
 	COMMA     = ","
 	SEMICOLON = ";"
@@ -30,19 +38,27 @@ const (
 
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
+	TRUE     = "TRUE"
+	FALSE    = "FALSE"
+	IF       = "IF"
+	ELSE     = "ELSE"
+	RETURN   = "RETURN"
 
 	// control characters
 	SPACE = " "
 	LF    = "\n"
-
-	RETURN = "RETURN"
 )
 
 // token/token.go
 
 var keywords = map[string]TokenType{
-	"fn":  FUNCTION,
-	"let": LET,
+	"fn":     FUNCTION,
+	"let":    LET,
+	"true":   TRUE,
+	"false":  FALSE,
+	"if":     IF,
+	"else":   ELSE,
+	"return": RETURN,
 }
 
 func LookupIdent(ident string) TokenType {

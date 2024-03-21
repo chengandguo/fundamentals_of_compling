@@ -12,7 +12,7 @@ type Statement interface {
 }
 
 type Expression interface {
-	Node
+	Node // TokenLiteral() string
 	expressionNode()
 }
 
@@ -27,6 +27,7 @@ func (p *Program) TokenLiteral() string {
 	return ""
 }
 
+// LetStatement 实现了Statement接口
 type LetStatement struct {
 	Token token.Token
 	Name  *Identifier
@@ -53,4 +54,18 @@ func (i *Identifier) expressionNode() {
 
 func (i *Identifier) TokenLiteral() string {
 	return i.Token.Literal
+}
+
+// return part
+type ReturnStatement struct {
+	Token       token.Token
+	ReturnValue Expression
+}
+
+func (rs *ReturnStatement) statementNode() {
+
+}
+
+func (rs *ReturnStatement) TokenLiteral() string {
+	return rs.Token.Literal
 }

@@ -6,6 +6,17 @@ import (
 
 type StringList []string
 
+// get peek element of string list
+func (l *StringList) Peek(args ...string) (string, error) {
+	length := len(*l)
+	if length > 0 {
+		target := (*l)[length-1]
+		return target, nil
+	} else {
+		return "", errors.New("list is empty")
+	}
+}
+
 func (l *StringList) Push(args ...string) int {
 	*l = append(*l, args...)
 	return len(*l)
